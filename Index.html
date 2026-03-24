@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCESS PAI</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+
+/* BACKGROUND GERAK */
+background:linear-gradient(-45deg,#000,#001a33,#000,#002b55);
+background-size:400% 400%;
+animation:bg 10s infinite;
+}
+
+@keyframes bg{
+0%{background-position:0%}
+50%{background-position:100%}
+100%{background-position:0%}
+}
+
+.card{
+width:330px;
+padding:20px;
+border-radius:20px;
+background:rgba(0,0,0,0.7);
+border:1px solid yellow;
+text-align:center;
+}
+
+button{
+margin-top:10px;
+padding:10px;
+width:100%;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,yellow,blue);
+font-weight:bold;
+}
+
+input{
+width:80px;
+margin:5px;
+padding:8px;
+border-radius:8px;
+border:none;
+}
+
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+
+<audio id="pip" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+
+<div class="card">
+
+<div id="awal">
+<h2>ACCESS PAI</h2>
+<button onclick="mulai()">MASUK</button>
+</div>
+
+<div id="verif" class="hidden">
+<p>Tanggal lahir</p>
+<input id="tgl" placeholder="Tgl">
+<input id="bln" placeholder="Bln">
+<input id="thn" placeholder="Thn">
+<button onclick="cek()">LANJUT</button>
+</div>
+
+<div id="quiz" class="hidden">
+<p id="info"></p>
+<p id="soal"></p>
+<button onclick="jawab(0)" id="a"></button>
+<button onclick="jawab(1)" id="b"></button>
+<button onclick="jawab(2)" id="c"></button>
+</div>
+
+<p id="error" style="color:red;"></p>
+
+</div>
+
+<script>
+
+// SOUND
+function bunyi(){
+let a=document.getElementById("pip");
+a.currentTime=0;
+a.play();
+}
+
+// FLOW
+function mulai(){
+bunyi();
+hide("awal"); show("verif");
+}
+
+function cek(){
+bunyi();
+let umur=2026 - document.getElementById("thn").value;
+
+if(umur>=13){
+hide("verif"); show("quiz");
+tampil();
+}else{
+error("Umur tidak cukup ❌");
+}
+}
+
+// QUIZ
+let nyawa=3;
+let index=0;
+
+let data=[
+["Planet terbesar?",["Mars","Jupiter","Venus"],1],
+["Planet terpanas?",["Venus","Merkurius","Mars"],0],
+["Galaksi kita?",["Bima Sakti","Andromeda","Orion"],0],
+["Bintang terdekat?",["Matahari","Mars","Venus"],0],
+["Satelit bumi?",["Bulan","Mars","Venus"],0],
+["Planet merah?",["Mars","Venus","Bumi"],0],
+["Planet cincin?",["Saturnus","Mars","Bumi"],0],
+["Apa itu nebula?",["Awan gas","Planet","Bintang"],0],
+["Apa itu asteroid?",["Batu luar angkasa","Air","Api"],0],
+["Apa itu komet?",["Benda berekor","Air","Tanah"],0],
+["Orbit adalah?",["Lintasan","Air","Api"],0],
+["Apa itu kosmos?",["Alam semesta","Tanah","Air"],0],
+["Planet biru?",["Bumi","Mars","Jupiter"],0],
+["Planet terdekat Matahari?",["Merkurius","Mars","Venus"],0],
+["Apa itu gravitasi?",["Gaya tarik","Air","Api"],0],
+["Apa itu exoplanet?",["Planet luar","Planet bumi","Bintang"],0],
+["Apa itu supernova?",["Ledakan bintang","Planet","Gas"],0],
+["Apa itu black hole?",["Lubang hitam","Planet","Air"],0],
+["Apa itu quasar?",["Inti galaksi","Planet","Gas"],0],
+["Apa itu pulsar?",["Bintang neutron","Planet","Gas"],0],
+["Apa itu dark matter?",["Materi tak terlihat","Air","Api"],0],
+["Apa itu red giant?",["Bintang besar tua","Planet","Gas"],0],
+["Apa itu white dwarf?",["Sisa bintang","Planet","Gas"],0],
+
+// ASTROFISIKA
+["Energi bintang berasal dari?",["Fusi nuklir","Air","Angin"],0],
+["Apa itu relativitas?",["Teori ruang waktu","Air","Tanah"],0]
+];
+
+function tampil(){
+document.getElementById("info").innerText=
+"Soal "+(index+1)+"/25 | Nyawa: "+nyawa;
+
+let s=data[index];
+
+let jawaban=[
+{text:s[1][0], benar:(s[2]===0)},
+{text:s[1][1], benar:(s[2]===1)},
+{text:s[1][2], benar:(s[2]===2)}
+];
+
+jawaban.sort(()=>Math.random()-0.5);
+
+soal.innerText=s[0];
+a.innerText=jawaban[0].text;
+b.innerText=jawaban[1].text;
+c.innerText=jawaban[2].text;
+
+window.kunci=jawaban.map(j=>j.benar);
+}
+
+function jawab(p){
+bunyi();
+
+if(window.kunci[p]){
+index++;
+if(index<25){
+tampil();
+}else{
+alert("Lulus semua! 🎉");
+window.location.href="https://chat.whatsapp.com/XXXXXXXX";
+}
+}else{
+nyawa--;
+if(nyawa<=0){
+alert("Gagal 😢");
+location.reload();
+}else{
+tampil();
+}
+}
+}
+
+// UTIL
+function hide(id){document.getElementById(id).classList.add("hidden");}
+function show(id){document.getElementById(id).classList.remove("hidden");}
+function error(t){document.getElementById("error").innerText=t;}
+
+</script>
+
+</body>
+</html>
